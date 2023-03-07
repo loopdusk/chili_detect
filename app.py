@@ -90,7 +90,7 @@ def main():
 
     # option = st.sidebar.radio("Select input type.", ['Image', 'Video'])
     if torch.cuda.is_available():
-        deviceoption = st.sidebar.radio("หน่วยประมวลผลที่ใช้", ['cpu'])
+        deviceoption = st.sidebar.radio("หน่วยประมวลผลที่ใช้", ['cpu'], index=1)
     # else:
     #     deviceoption = st.sidebar.radio("เลือกหน่วยประมวลผลที่จะใช้", ['cpu', 'cuda'], index=0)
     # -- End of Sidebar
