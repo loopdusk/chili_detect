@@ -10,8 +10,6 @@ from pyrsistent import s
 import wget
 import time
 import pathlib
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
 from fastai.vision.all import (
     load_learner,
     PILImage,
