@@ -60,6 +60,7 @@ def imageInput(device, src):
             if image_file is not None and submit:
                 # call Model prediction--
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
+                model.cuda() if device == 'gpu' else model.cpu()
                 #model = torch.load('models/best.pt')
                 pred = model(image_file)
                 #disease_name = pred.diseae
