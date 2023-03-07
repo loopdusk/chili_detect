@@ -30,7 +30,8 @@ def imageInput(device, src):
             # call Model prediction--
            
             model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
-            model.cuda() if device == 'cuda' else model.cpu()
+            # model.cuda() if device == 'cuda' else model.cpu()
+            model.cpu()
             pred = model(imgpath)
             pred.render()  # render bbox in image
             for im in pred.ims:
@@ -60,7 +61,6 @@ def imageInput(device, src):
             if image_file is not None and submit:
                 # call Model prediction--
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
-                model.cuda() if device == 'cuda' else model.cpu()
                 pred = model(image_file)
                 #disease_name = pred.diseae
                 pred.render()  # render bbox in image
@@ -90,9 +90,9 @@ def main():
 
     # option = st.sidebar.radio("Select input type.", ['Image', 'Video'])
     if torch.cuda.is_available():
-        deviceoption = st.sidebar.radio("เลือกหน่วยประมวลผลที่จะใช้", ['cpu', 'cuda'], index=1)
-    else:
-        deviceoption = st.sidebar.radio("เลือกหน่วยประมวลผลที่จะใช้", ['cpu', 'cuda'], index=0)
+        deviceoption = st.sidebar.radio("หน่วยประมวลผลที่ใช้", ['cpu'])
+    # else:
+    #     deviceoption = st.sidebar.radio("เลือกหน่วยประมวลผลที่จะใช้", ['cpu', 'cuda'], index=0)
     # -- End of Sidebar
 
     st.header('🌶️ Chili Detection Model')
