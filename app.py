@@ -16,6 +16,8 @@ from fastai.vision.all import (
     load_learner,
     PILImage,
 )
+temp = pathlib.PosixPath
+pathlib.PosixPath = pathlib.WindowsPath
 
 def imageInput(device, src):
     enter=False
