@@ -10,14 +10,12 @@ from pyrsistent import s
 import wget
 import time
 import pathlib
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
 from fastai.vision.all import (
     load_learner,
     PILImage,
 )
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+# temp = pathlib.PosixPath
+# pathlib.PosixPath = pathlib.WindowsPath
 
 def imageInput(device, src):
     enter=False
