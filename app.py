@@ -4,7 +4,6 @@ import detect
 from PIL import Image
 from io import *
 import glob
-import numpy as np
 from datetime import datetime
 import os
 from pyrsistent import s
@@ -20,7 +19,6 @@ from fastai.vision.all import (
 
 def imageInput(device, src):
     enter=False
-    class_names = ['frog_eye','yellow_leaf']
     description = ["""โรคใบจุดตากบ (frog_eye) จะพบประจำในพริกและยาสูบ จุดแผลจะกลม กลางแผลมีสีเทาขอบแผลสีน้ำตาล แผลจะกระจายทั่วไป โรคนี้เกิดจากเชื้อเซอโคสะปอร่า (Cercospora) การควบคุมโรคนี้ใช้สารชนิดเดียวกับที่ใช้ควบคุมแอนแทรคโนสก็ได้ หรือจะใช้สารประเภทคลอโรธาโรนิล (chlorothalonil) ฉีดพ่นสม่ำเสมอขณะระบาด จะได้ผลดี""", 
                    """โรคใบเหลือง (yellow_leaf) สาเหตุส่วนใหญ่ที่ทำให้ต้นไม้ใบเหลือง เป็นเพราะรดน้ำมากเกินไป ความชื้นในดินสูง หรือดินแน่น ระบายน้ำยาก วิธีแก้ปัญหาเบื้องต้นคือ ตัดใบส่วนนั้นทิ้งไป จากนั้นเว้นการรดน้ำไปสักระยะ แล้วค่อยกลับมารดน้ำใหม่เมื่อดินแห้ง เช็กง่าย ๆ โดยใช้นิ้วกดลงไปในดินประมาณ 1 นิ้ว หากหน้าดินแห้งก็รดน้ำได้ แต่ถ้าดินยังแฉะก็ควรรอก่อน"""]
     GOOD_OR_BAD = pathlib.Path("models/good_or_bad.pkl")
@@ -44,7 +42,6 @@ def imageInput(device, src):
                 # model.cuda() if device == 'cuda' else model.cpu()
                 model.cpu()
                 pred = model(imgpath)
-                class_names = pred.names
                 pred.render()  # render bbox in image
                 for im in pred.ims:
                     im_base64 = Image.fromarray(im)
@@ -75,19 +72,8 @@ def imageInput(device, src):
                 # call Model prediction--
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
                 pred = model(image_file)
-                class_probs = pred.pred[0].softmax(dim=-1).cpu().numpy()
-                class_labels = pred.pred[0].argmax(dim=-1).cpu().numpy()
-                class_names = pred.names
+                #disease_name = pred.diseae
                 pred.render()  # render bbox in image
-                for i, (prob, label) in enumerate(zip(class_probs, class_labels)):
-                    class_name = class_names[label]
-                    print(f'Class {i+1}: {class_name}, Probability: {prob:.2f}')
-                    if class_name == 'frog_eye':
-                        st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
-                        st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
-                    elif class_name == 'yellow_leaf':
-                        st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
-                        st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
                 for im in pred.ims:
                     im_base64 = Image.fromarray(im)
                     im_base64.save(os.path.join('data/outputs', os.path.basename(image_file)))
@@ -95,14 +81,12 @@ def imageInput(device, src):
                     img_ = Image.open(os.path.join('data/outputs', os.path.basename(image_file)))
                     st.image(img_, caption='Model Prediction', use_column_width='always')
                     enter=True
-        # if enter==True:
-            if class_names == 'frog_eye':
-                st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
-                st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
-            # st.markdown("<div><br></div>", unsafe_allow_html=True)
-            elif class_names == 'yellow_leaf':
-                st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
-                st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
+        if enter==True:
+            st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
+            st.markdown("<div><br></div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
                     # if disease_name == "yellow_leaf":
                     #     st.markdown(description[0], unsafe_allow_html=True)
                     # elif disease_name == "frog_eye":
