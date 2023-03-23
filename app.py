@@ -76,6 +76,9 @@ def imageInput(device, src):
                 #disease_name = pred.diseae
                 class_names = pred.names
                 pred.render()  # render bbox in image
+                if class_names == 'frog_eye':
+                    st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
                 for im in pred.ims:
                     im_base64 = Image.fromarray(im)
                     im_base64.save(os.path.join('data/outputs', os.path.basename(image_file)))
@@ -83,7 +86,7 @@ def imageInput(device, src):
                     img_ = Image.open(os.path.join('data/outputs', os.path.basename(image_file)))
                     st.image(img_, caption='Model Prediction', use_column_width='always')
                     enter=True
-        if enter==True:
+        # if enter==True:
             if class_names == 'frog_eye':
                 st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
                 st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
@@ -117,3 +120,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
