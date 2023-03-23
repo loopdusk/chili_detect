@@ -42,6 +42,7 @@ def imageInput(device, src):
                 # model.cuda() if device == 'cuda' else model.cpu()
                 model.cpu()
                 pred = model(imgpath)
+                class_names = pred.names
                 pred.render()  # render bbox in image
                 for im in pred.ims:
                     im_base64 = Image.fromarray(im)
@@ -73,6 +74,7 @@ def imageInput(device, src):
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
                 pred = model(image_file)
                 #disease_name = pred.diseae
+                class_names = pred.names
                 pred.render()  # render bbox in image
                 for im in pred.ims:
                     im_base64 = Image.fromarray(im)
@@ -82,11 +84,13 @@ def imageInput(device, src):
                     st.image(img_, caption='Model Prediction', use_column_width='always')
                     enter=True
         if enter==True:
-            st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
-            st.markdown("<div><br></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
+            if class_names == 'frog_eye':
+                st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
+            # st.markdown("<div><br></div>", unsafe_allow_html=True)
+            elif class_names == 'yellow_leaf':
+                st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
                     # if disease_name == "yellow_leaf":
                     #     st.markdown(description[0], unsafe_allow_html=True)
                     # elif disease_name == "frog_eye":
@@ -113,5 +117,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
