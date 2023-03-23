@@ -74,6 +74,8 @@ def imageInput(device, src):
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
                 pred = model(image_file)
                 #disease_name = pred.diseae
+                class_probs = pred.pred[0].softmax(dim=-1).cpu().numpy()
+                class_labels = pred.pred[0].argmax(dim=-1).cpu().numpy()
                 class_names = pred.names
                 pred.render()  # render bbox in image
                 if class_names == 'frog_eye':
