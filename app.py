@@ -72,10 +72,6 @@ def imageInput(device, src):
                 # call Model prediction--
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
                 pred = model(image_file)
-                if 1 in pred.pred[:, 5]:
-                    st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
-                    st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
-                    print("Hello")
                 #disease_name = pred.diseae
                 pred.render()  # render bbox in image
                 for im in pred.ims:
