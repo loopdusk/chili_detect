@@ -4,6 +4,7 @@ import detect
 from PIL import Image
 from io import *
 import glob
+import numpy as np
 from datetime import datetime
 import os
 from pyrsistent import s
@@ -73,14 +74,19 @@ def imageInput(device, src):
                 # call Model prediction--
                 model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
                 pred = model(image_file)
-                #disease_name = pred.diseae
                 class_probs = pred.pred[0].softmax(dim=-1).cpu().numpy()
                 class_labels = pred.pred[0].argmax(dim=-1).cpu().numpy()
                 class_names = pred.names
                 pred.render()  # render bbox in image
-                if class_names == 'frog_eye':
-                    st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
-                    st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
+                for i, (prob, label) in enumerate(zip(class_probs, class_labels)):
+                    class_name = class_names[label]
+                    print(f'Class {i+1}: {class_name}, Probability: {prob:.2f}')
+                    if class_name == 'frog_eye':
+                        st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
+                        st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
+                    elif class_name == 'yellow_leaf':
+                        st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
+                        st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
                 for im in pred.ims:
                     im_base64 = Image.fromarray(im)
                     im_base64.save(os.path.join('data/outputs', os.path.basename(image_file)))
@@ -122,5 +128,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
