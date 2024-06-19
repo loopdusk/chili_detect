@@ -5,10 +5,10 @@ from datetime import datetime
 import os
 import pathlib
 from fastai.vision.all import load_learner
-#import cv2
+import cv2
 
-#if os.name == 'nt':
-#   pathlib.PosixPath = pathlib.WindowsPath
+if os.name == 'nt':
+   pathlib.PosixPath = pathlib.WindowsPath
 
 def load_models():
     GOOD_OR_BAD = pathlib.Path("models/good_or_bad.pkl")
