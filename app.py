@@ -61,7 +61,7 @@ def imageInput(device, src, good_or_bad, detection_model):
     if src == 'จากเครื่องของคุณ':
         image_file = st.file_uploader("อัปโหลดภาพ", type=['png', 'jpeg', 'jpg'])
         col1, col2 = st.columns(2)
-@@ -35,30 +54,12 @@ def imageInput(device, src):
+def imageInput(device, src):
             outputpath = os.path.join('data/outputs', os.path.basename(imgpath))
             with open(imgpath, mode="wb") as f:
                 f.write(image_file.getbuffer())
@@ -95,7 +95,7 @@ def imageInput(device, src, good_or_bad, detection_model):
         test_images = os.listdir('data/images/')
         test_image = st.selectbox('เลือกภาพของเว็บไซต์:', test_images)
         image_file = 'data/images/' + test_image
-@@ -67,51 +68,32 @@ def imageInput(device, src):
+def imageInput(device, src):
         with col1:
             img = Image.open(image_file)
             st.image(img, caption='Selected Image', use_column_width='always')
