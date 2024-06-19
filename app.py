@@ -90,11 +90,11 @@ def imageInput(device, src):
                 display_predictions(col2, outputpath, description)
             else:
                 st.error('ไม่สามารถใช้ภาพนี้ได้ กรุณาอัปโหลดใหม่อีกครั้ง')
-    elif src == 'จากไฟล์ของเว็บไซต์':
-        # Image selector slider
-        test_images = os.listdir('data/images/')
-        test_image = st.selectbox('เลือกภาพของเว็บไซต์:', test_images)
-        image_file = 'data/images/' + test_image
+            elif src == 'จากไฟล์ของเว็บไซต์':
+            # Image selector slider
+                test_images = os.listdir('data/images/')
+                test_image = st.selectbox('เลือกภาพของเว็บไซต์:', test_images)
+                image_file = 'data/images/' + test_image
 def imageInput(device, src):
         with col1:
             img = Image.open(image_file)
@@ -113,18 +113,18 @@ def imageInput(device, src):
                     img_ = Image.open(os.path.join('data/outputs', os.path.basename(image_file)))
                     st.image(img_, caption='Model Prediction', use_column_width='always')
                     enter=True
-        if enter==True:
-        if image_file is not None and submit:
-            success, outputpath = predict_image(good_or_bad, detection_model, image_file, os.path.join('data/outputs', os.path.basename(image_file)))
-            if success:
-                display_predictions(col2, outputpath, description)
-                enter = True
-        if enter:
-            st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
-            st.markdown("<div><br></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
+            if enter==True:
+            if image_file is not None and submit:
+                success, outputpath = predict_image(good_or_bad, detection_model, image_file, os.path.join('data/outputs', os.path.basename(image_file)))
+                if success:
+                    display_predictions(col2, outputpath, description)
+                    enter = True
+            if enter:
+                st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;align:center'><h1 style='color:#000000'>โรคใบจุดตากบ</h1></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
+                st.markdown("<div><br></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
                     # if disease_name == "yellow_leaf":
                     #     st.markdown(description[0], unsafe_allow_html=True)
                     # elif disease_name == "frog_eye":
