@@ -5,7 +5,6 @@ from datetime import datetime
 import os
 import pathlib
 from fastai.vision.all import load_learner
-import cv2
 
 #if os.name == 'nt':
 #    pathlib.PosixPath = pathlib.WindowsPath
