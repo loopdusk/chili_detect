@@ -15,7 +15,7 @@ pyrsistent>=0.19.3
 pathlib>=1.0.1
 fastai>=2.7.11
 streamlit>=1.33.0
-opencv-python>=4.4.0
+scikit-learn>=1.4.0
 # protobuf<=3.20.1  # https://github.com/ultralytics/yolov5/issues/8012
 
 # Logging -------------------------------------
