@@ -9,7 +9,7 @@ from fastai.vision.all import load_learner
 def load_models():
     GOOD_OR_BAD = pathlib.Path("models/good_or_bad.pkl")
     good_or_bad = load_learner(GOOD_OR_BAD)
-    detection_model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', force_reload=True)
+    detection_model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/best.pt', source='local')
     return good_or_bad, detection_model
 
 def predict_image(good_or_bad, detection_model, imgpath, outputpath):
@@ -54,6 +54,7 @@ def imageInput(device, src, good_or_bad, detection_model):
             outputpath = os.path.join('data/outputs', os.path.basename(imgpath))
             with open(imgpath, mode="wb") as f:
                 f.write(image_file.getbuffer())
+            # call Model prediction--
             success, outputpath = predict_image(good_or_bad, detection_model, imgpath, outputpath)
             if success:
                 display_predictions(col2, outputpath, description)
@@ -78,7 +79,7 @@ def imageInput(device, src, good_or_bad, detection_model):
             st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[0]}</div>", unsafe_allow_html=True)
             st.markdown("<div><br></div>", unsafe_allow_html=True)
             st.markdown(f"<div style='background:#FF6F61;padding:0 20px 0 20px;border-radius:10px 10px 0 0;'><h1 style='color:#000000'>โรคใบเหลือง</h1></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background:none;padding:30px;border-radius:0 0 10px 10px;border:2px solid #FF6F61'>{description[1]}</div>", unsafe.allow_html=True)
 
 def main():
     st.sidebar.title('⚙️Options')
